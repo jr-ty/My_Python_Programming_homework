@@ -1,0 +1,15 @@
+{% extends "blogs/base.html" %}
+{% load crispy_forms_tags %} {% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card p-4">
+            <h3 class="mb-3">撰写新文章</h3>
+            <form action="{% url 'blogs:new_post' %}" method='post'>
+                {% csrf_token %}
+                {{ form|crispy }}
+                <button name="submit" class="btn btn-primary mt-3 w-100">🚀 发布文章</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,9 @@
+{% extends 'blogs/base.html' %}
+{% load crispy_forms_tags %}{% block content %}
+    <h2>编辑文章</h2>
+    <form action="{% url 'blogs:edit_post' post.id %}" method='post'>
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button name="submit">保存修改</button>
+    </form>
+{% endblock content %}
