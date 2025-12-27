@@ -1,0 +1,58 @@
+{% extends 'blogs/base.html' %}
+
+{% block content %}
+<div class="row align-items-center mb-4">
+    <div class="col">
+        <h2 class="fw-bold text-secondary">最新动态</h2>
+    </div>
+    {% if user.is_authenticated %}
+    <div class="col-auto">
+        <a href="{% url 'blogs:new_post' %}" class="btn btn-success">+ 写文章</a>
+    </div>
+    {% endif %}
+</div>
+
+<div class="row">
+    {% for post in posts %}
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title text-primary">{{ post.title }}</h5>
+                    <h6 class="card-subtitle mb-3 text-muted">
+                        <small>
+                            📅 {{ post.date_added|date:'Y年m月d日 H:i' }}
+                            👤 {{ post.owner.username }}
+                        </small>
+                    </h6>
+                    <p class="card-text">{{ post.text|truncatechars:100 }}</p>
+
+                    <div class="mt-3">
+                        {% if user == post.owner %}
+                            <a href="{% url 'blogs:edit_post' post.id %}" class="btn btn-sm btn-outline-primary">编辑</a>
+                            <a href="{% url 'blogs:delete_post' post.id %}" class="btn btn-sm btn-outline-danger" onclick="return confirm('确定要删除这篇文章吗？');">删除</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="col-12 text-center py-5">
+            <h4 class="text-muted">还没有人发布文章...</h4>
+        </div>
+    {% endfor %}
+</div>
+
+{% if is_paginated %}
+<nav class="mt-4">
+  <ul class="pagination justify-content-center">
+    {% if page_obj.has_previous %}
+      <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">上一页</a></li>
+    {% endif %}
+    <li class="page-item disabled"><span class="page-link">第 {{ page_obj.number }} 页 / 共 {{ page_obj.paginator.num_pages }} 页</span></li>
+    {% if page_obj.has_next %}
+      <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">下一页</a></li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}
+{% endblock content %}
